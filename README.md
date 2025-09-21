@@ -1,28 +1,46 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+# 🔐 PassLocker
 
-# Flask + Vercel
+**PassLocker** is a secure web application for encrypting and decrypting messages using **RSA encryption**. It allows users to securely store sensitive information locally and retrieve it when needed. Built with **Python Flask**, **HTML**, **CSS**, and **JavaScript**, it provides a smooth, modern, and responsive UI for encryption and decryption operations.
 
-This example shows how to use Flask 3 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+---
 
-## Demo
+## 🛠 Features
 
-https://flask-python-template.vercel.app/
+- **Encrypt messages securely**
+  - Enter a text message (up to 500 words) and encrypt it.
+  - Generates two downloadable files: encrypted message and RSA key.
 
-## How it Works
+- **Decrypt messages easily**
+  - Upload the encrypted message file and its corresponding key file.
+  - Get the decrypted message as a downloadable file.
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
+- **Modern and responsive UI**
+  - Clean two-panel layout for encryption and decryption.
+  - Smooth animations, background floating shapes, and gradient buttons.
+  - Fully responsive for desktops, tablets, and mobile devices.
 
-## Running Locally
+- **Drag-and-drop file uploads**
+  - Simply drag encrypted/key files into the upload areas.
 
-```bash
-npm i -g vercel
-vercel dev
-```
+- **Word counter & validation**
+  - Tracks word count in real-time.
+  - Limits messages to 500 words.
 
-Your Flask application is now available at `http://localhost:3000`.
+- **Notifications**
+  - Real-time notifications for errors, successes, or warnings.
+  - Auto-dismiss after 5 seconds with optional manual close.
 
-## One-Click Deploy
+- **Accessibility & dark mode**
+  - Keyboard focus styles, reduced motion support.
+  - Supports dark mode and high-contrast preferences.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+- **No external dependencies for frontend**
+  - Uses native HTML, CSS, and JavaScript.
+  - Font Awesome for icons and Google Fonts for typography.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask3&demo-title=Flask%203%20%2B%20Vercel&demo-description=Use%20Flask%203%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask3-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+---
+
+## 🖥 Technology Stack
+
+- **Frontend:** HTML5, CSS3, JavaScript, Font Awesome, Google Fonts
+- **Backend:** Python 3.x, Flask, RSA encryption in Python
