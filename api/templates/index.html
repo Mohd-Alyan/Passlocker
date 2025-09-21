@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 PassLocker - Secure Password Encryption</title>
+    
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background animation -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-lock"></i>
+                <h1>PassLocker</h1>
+            </div>
+            <div class="header-subtitle">
+                <p>Secure Password Encryption & Decryption Tool</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App -->
+    <main class="main-container">
+        <div class="container">
+            <div class="app-panels">
+                <!-- Encryption Panel -->
+                <div class="panel encrypt-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-shield-alt"></i> Encrypt Message</h2>
+                        <p>Enter your message below to encrypt it securely</p>
+                    </div>
+                    <div class="panel-content">
+                        <div class="input-group">
+                            <label for="message-input">Your Message (Max 500 words)</label>
+                            <textarea id="message-input" placeholder="Enter your secret message..." maxlength="5000" rows="8"></textarea>
+                            <div class="word-counter">
+                                <span id="word-count">0</span> / 500 words
+                            </div>
+                        </div>
+                        <button id="encrypt-btn" class="action-btn encrypt-btn">
+                            <i class="fas fa-lock"></i>
+                            <span>Encrypt Message</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                        <div id="encrypt-results" class="results-section">
+                            <h3>Encryption Complete!</h3>
+                            <div class="download-links">
+                                <a id="download-encrypted" class="download-link">
+                                    <i class="fas fa-download"></i> Download Encrypted Message
+                                </a>
+                                <a id="download-key" class="download-link">
+                                    <i class="fas fa-key"></i> Download Encryption Key
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decryption Panel -->
+                <div class="panel decrypt-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-unlock-alt"></i> Decrypt Message</h2>
+                        <p>Upload your encrypted files to decrypt the message</p>
+                    </div>
+                    <div class="panel-content">
+                        <div class="file-upload-group">
+                            <div class="file-upload-area" id="cipher-upload-area">
+                                <input type="file" id="cipher-file" accept=".txt" hidden>
+                                <div class="upload-content">
+                                    <i class="fas fa-file-text"></i>
+                                    <p>Click to upload encrypted message file</p>
+                                    <span class="file-name" id="cipher-file-name">No file selected</span>
+                                </div>
+                            </div>
+                            <div class="file-upload-area" id="key-upload-area">
+                                <input type="file" id="key-file" accept=".txt" hidden>
+                                <div class="upload-content">
+                                    <i class="fas fa-key"></i>
+                                    <p>Click to upload key file</p>
+                                    <span class="file-name" id="key-file-name">No file selected</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="decrypt-btn" class="action-btn decrypt-btn" disabled>
+                            <i class="fas fa-unlock"></i>
+                            <span>Decrypt Message</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                        <div id="decrypt-results" class="results-section">
+                            <h3>Decryption Complete!</h3>
+                            <div class="download-links">
+                                <a id="download-decrypted" class="download-link">
+                                    <i class="fas fa-download"></i> Download Decrypted Message
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notifications -->
+    <div id="notification-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 PassLocker made by Mohd Alyan. Secure encryption for everyone.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
