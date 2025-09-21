@@ -46,14 +46,11 @@ encryptBtn.addEventListener('click', async () => {
         if (data.success) {
             encryptResults.classList.add('show');
 
-            // Create downloadable blobs
-            const encBlob = new Blob([data.encrypted_file], {type: 'text/plain'});
-            const keyBlob = new Blob([data.key_file], {type: 'text/plain'});
-
-            downloadEncrypted.href = URL.createObjectURL(encBlob);
+            // Set download links to server files
+            downloadEncrypted.href = data.encrypted_url;
             downloadEncrypted.download = 'encrypted.txt';
 
-            downloadKey.href = URL.createObjectURL(keyBlob);
+            downloadKey.href = data.key_url;
             downloadKey.download = 'key.txt';
         } else {
             alert("Encryption failed: " + data.error);
@@ -102,17 +99,13 @@ decryptBtn.addEventListener('click', async () => {
         const res = await fetch('/decrypt', {method: 'POST', body: formData});
         decryptBtn.classList.remove('loading');
 
-        if (res.ok) {
-            const blob = await res.blob();
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'decrypted.txt';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+        const data = await res.json();
+
+        if (data.success) {
+            decryptResults.classList.add('show');
+            downloadDecrypted.href = data.decrypted_url;
+            downloadDecrypted.download = 'decrypted.txt';
         } else {
-            const data = await res.json();
             alert("Decryption failed: " + (data.error || 'Unknown error'));
         }
     } catch (err) {

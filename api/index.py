@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file
+from io import BytesIO
 import random
-import io
 
 app = Flask(__name__)
 
@@ -92,55 +92,39 @@ def encrypt():
     try:
         pub, priv = generate_keys()
         cipher_list = encrypt_rsa(message, pub)
-        
-        # Prepare in-memory files
-        enc_file = io.StringIO()
-        enc_file.write(','.join(map(str,cipher_list)))
-        enc_file.seek(0)
 
-        key_file = io.StringIO()
-        key_file.write(f"{priv[0]},{priv[1]}")
-        key_file.seek(0)
+        # Return encrypted and key as strings
+        encrypted_str = ','.join(map(str, cipher_list))
+        key_str = f"{priv[0]},{priv[1]}"
 
         return jsonify(
             success=True,
-            encrypted_file=enc_file.getvalue(),
-            key_file=key_file.getvalue()
+            encrypted_content=encrypted_str,
+            key_content=key_str
         )
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
 @app.route('/decrypt', methods=['POST'])
 def decrypt():
-    cipher_file = request.files.get('cipher_file')
-    key_file = request.files.get('key_file')
-    if not cipher_file or not key_file:
-        return jsonify(success=False, error="Missing files")
+    data = request.get_json()
+    cipher_text = data.get('cipher','').strip()
+    key_text = data.get('key','').strip()
+
+    if not cipher_text or not key_text:
+        return jsonify(success=False, error="Missing data")
 
     try:
-        cipher_text = cipher_file.read().decode()
-        cipher_list = list(map(int,cipher_text.strip().split(',')))
-
-        key_text = key_file.read().decode()
-        d, n = map(int, key_text.strip().split(','))
+        cipher_list = list(map(int, cipher_text.split(',')))
+        d, n = map(int, key_text.split(','))
         privkey = (d,n)
 
         decrypted_message = decrypt_rsa(cipher_list, privkey)
-
-        # Return in-memory decrypted file
-        decrypted_io = io.BytesIO()
-        decrypted_io.write(decrypted_message.encode())
-        decrypted_io.seek(0)
-
-        return send_file(
-            decrypted_io,
-            as_attachment=True,
-            download_name='decrypted.txt',
-            mimetype='text/plain'
-        )
+        return jsonify(success=True, decrypted_content=decrypted_message)
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
 # =================== RUN APP ===================
+
 if __name__ == '__main__':
     app.run()
