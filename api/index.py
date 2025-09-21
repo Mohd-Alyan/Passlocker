@@ -1,11 +1,8 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
-import os
+from flask import Flask, render_template, request, jsonify, send_file
 import random
-from pathlib import Path
+import io
 
 app = Flask(__name__)
-app.config['DOWNLOAD_FOLDER'] = 'downloads'
-Path(app.config['DOWNLOAD_FOLDER']).mkdir(exist_ok=True)
 
 # =================== RSA UTILITIES ===================
 
@@ -96,18 +93,19 @@ def encrypt():
         pub, priv = generate_keys()
         cipher_list = encrypt_rsa(message, pub)
         
-        # Save files
-        enc_file = os.path.join(app.config['DOWNLOAD_FOLDER'],'encrypted.txt')
-        key_file = os.path.join(app.config['DOWNLOAD_FOLDER'],'key.txt')
-        with open(enc_file,'w') as f:
-            f.write(','.join(map(str,cipher_list)))
-        with open(key_file,'w') as f:
-            f.write(f"{priv[0]},{priv[1]}")  # d,n
+        # Prepare in-memory files
+        enc_file = io.StringIO()
+        enc_file.write(','.join(map(str,cipher_list)))
+        enc_file.seek(0)
+
+        key_file = io.StringIO()
+        key_file.write(f"{priv[0]},{priv[1]}")
+        key_file.seek(0)
 
         return jsonify(
             success=True,
-            encrypted_url=f'/downloads/encrypted.txt',
-            key_url=f'/downloads/key.txt'
+            encrypted_file=enc_file.getvalue(),
+            key_file=key_file.getvalue()
         )
     except Exception as e:
         return jsonify(success=False, error=str(e))
@@ -128,20 +126,20 @@ def decrypt():
         privkey = (d,n)
 
         decrypted_message = decrypt_rsa(cipher_list, privkey)
-        decrypted_file = os.path.join(app.config['DOWNLOAD_FOLDER'],'decrypted.txt')
-        with open(decrypted_file,'w') as f:
-            f.write(decrypted_message)
 
-        return jsonify(
-            success=True,
-            decrypted_url=f'/downloads/decrypted.txt'
+        # Return in-memory decrypted file
+        decrypted_io = io.BytesIO()
+        decrypted_io.write(decrypted_message.encode())
+        decrypted_io.seek(0)
+
+        return send_file(
+            decrypted_io,
+            as_attachment=True,
+            download_name='decrypted.txt',
+            mimetype='text/plain'
         )
     except Exception as e:
         return jsonify(success=False, error=str(e))
-
-@app.route('/downloads/<path:filename>')
-def download_file(filename):
-    return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
 
 # =================== RUN APP ===================
 if __name__ == '__main__':
